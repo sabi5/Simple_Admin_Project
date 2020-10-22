@@ -22,8 +22,14 @@ if (isset($_POST['submit'])) {
     $image= $_POST['image'];
     $price=$_POST['price'];
     $description=$_POST['description'];
-    $category=$_POST['category'];
-    $tag=$_POST['headphone'];
+	$category=$_POST['category'];
+	$tag=$_POST['checkbox'];
+	$tag2 = implode(',', $tag);
+	
+	// $tsql="SELECT * FROM tags";
+    // $tres=mysqli_query($con, $tsql);
+	// $trow = mysqli_fetch_assoc($tres);
+    //$tag=$trow['tag_id'];
 
     $sql="SELECT * FROM products";
     $res=mysqli_query($con, $sql);
@@ -32,7 +38,7 @@ if (isset($_POST['submit'])) {
         echo '<script> alert("Product already  exist"); </script>';
     } else {
         $insert_sql="INSERT INTO products (category_id,tag_id,name,image,price,description )VALUES
-        ('$category', '$tag' ,'$name','$image','$price','$description')";
+        ('$category', '$tag2' ,'$name','$image','$price','$description')";
         $iquery=mysqli_query($con, $insert_sql);
         if ($iquery) {
             echo '<script> alert("Product Added successfully") </script>';
@@ -103,17 +109,44 @@ if (isset($_POST['submit'])) {
 						<p>
 							<label>Category</label>              
 							<select name="category" class="small-input">
-								<option value="1">Men</option>
-								<option value="2">Women</option>
-								<option value="3">Kids</option>
-								<option value="4">Electronics</option>
-								<option value="5">Sports</option>
-							</select> 
+								<?php
+								$query="SELECT *FROM categories";
+								$result = mysqli_query($con, $query)or die($mysqli_error($con));
+								$data='';
+								if (mysqli_num_rows($result) >= 1) {
+									
+									while ($row = mysqli_fetch_array($result)) {
+
+										$data .= "<option value='".$row['category_id']."'>".$row['name']."</option>";
+											
+										}
+										echo $data;
+								}
+								?>
+							</select>
 						</p>
+
 						<p>
 							<label>Tags</label>
-							<input type="checkbox" name="fashion" /> Fashion <input type="checkbox" name="ecommerce" /> Ecommerce <input type="checkbox" name="shop" /> Shop <input type="checkbox" name="handbag" /> Hand Bag <input type="checkbox" name="laptop" /> Laptop <input type="checkbox" name="headphone" /> Headphone
-							
+							<!-- <input type="checkbox" name="fashion" /> Fashion <input type="checkbox" name="ecommerce" />
+							 Ecommerce <input type="checkbox" name="shop" /> Shop <input type="checkbox" name="handbag" /> Hand Bag <input type="checkbox" name="laptop" /> Laptop <input type="checkbox" name="headphone" /> Headphone
+							 -->
+							<?php
+								$query="SELECT *FROM tags";
+								$result = mysqli_query($con, $query)or die($mysqli_error($con));
+								$data1='';
+								if (mysqli_num_rows($result) >= 1) {
+									
+									while ($row1 = mysqli_fetch_array($result)) {
+
+										$data1 .= "<input type='checkbox' value='".$row1['tag_id']."' name='checkbox[]'/>".$row1['name']."";
+											
+										}
+										echo $data1;
+								}
+								?>
+
+
 						</p>
 	
 						<p>
