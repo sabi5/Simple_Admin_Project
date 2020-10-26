@@ -3,7 +3,7 @@
   require "links.php";
   require "connection.php";
 
-  echo '<script>alert("Hello");</script>';
+  //echo '<script>alert("Hello");</script>';
   $cart_data = json_encode($_SESSION['cart']);
    
   if (isset($_GET['grand_total'])) {
@@ -18,6 +18,7 @@
       
       if ($query) {
           echo "<script>alert('Order Inserted Successfully');</script>";
+          
           
       } else {
               echo "<script>alert('Not inserted');</script>";

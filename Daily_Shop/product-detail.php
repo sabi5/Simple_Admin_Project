@@ -1,3 +1,5 @@
+<?php require "connection.php";
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -41,6 +43,14 @@
   </section>
   <!-- / catg header banner section -->
 
+  <?php
+    $ids = $_GET['id']; 
+    $sql = "SELECT * FROM products WHERE product_id = $ids";
+    $res = mysqli_query($con, $sql)or die($mysqli_error($con));
+    
+    if (mysqli_num_rows($res) >= 1) {
+      while ($data = mysqli_fetch_array($res)) {
+  ?>      
   <!-- product category -->
   <section id="aa-product-details">
     <div class="container">
@@ -54,28 +64,18 @@
                   <div class="aa-product-view-slider">                                
                     <div id="demo-1" class="simpleLens-gallery-container">
                       <div class="simpleLens-container">
-                        <div class="simpleLens-big-image-container"><a data-lens-image="img/view-slider/large/polo-shirt-1.png" class="simpleLens-lens-image"><img src="img/view-slider/medium/polo-shirt-1.png" class="simpleLens-big-image"></a></div>
-                      </div>
-                      <div class="simpleLens-thumbnails-container">
-                          <a data-big-image="img/view-slider/medium/polo-shirt-1.png" data-lens-image="img/view-slider/large/polo-shirt-1.png" class="simpleLens-thumbnail-wrapper" href="#">
-                            <img src="img/view-slider/thumbnail/polo-shirt-1.png">
-                          </a>                                    
-                          <a data-big-image="img/view-slider/medium/polo-shirt-3.png" data-lens-image="img/view-slider/large/polo-shirt-3.png" class="simpleLens-thumbnail-wrapper" href="#">
-                            <img src="img/view-slider/thumbnail/polo-shirt-3.png">
-                          </a>
-                          <a data-big-image="img/view-slider/medium/polo-shirt-4.png" data-lens-image="img/view-slider/large/polo-shirt-4.png" class="simpleLens-thumbnail-wrapper" href="#">
-                            <img src="img/view-slider/thumbnail/polo-shirt-4.png">
-                          </a>
+                        <div class="simpleLens-big-image-container"><a data-lens-image="img/view-slider/large/polo-shirt-1.png" class="simpleLens-lens-image"><img src="<?php echo "img/". $data['image'];?>" class="simpleLens-big-image"></a></div>
                       </div>
                     </div>
                   </div>
                 </div>
                 <!-- Modal view content -->
+               
                 <div class="col-md-7 col-sm-7 col-xs-12">
                   <div class="aa-product-view-content">
-                    <h3>T-Shirt</h3>
+                    <h3><?php echo $data['name'];?></h3>
                     <div class="aa-price-block">
-                      <span class="aa-product-view-price">$34.99</span>
+                      <span class="aa-product-view-price"><?php echo $data['price'];?></span>
                       <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                     </div>
                     <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis animi, veritatis quae repudiandae quod nulla porro quidem, itaque quis quaerat!</p>
@@ -106,16 +106,31 @@
                         </select>
                       </form>
                       <p class="aa-prod-category">
-                        Category: <a href="#">Polo T-Shirt</a>
+                        <?php 
+                          $cat_id=$data['category_id'];
+                          $query="SELECT * FROM categories WHERE category_id = $cat_id";
+                          $result = mysqli_query($con, $query)or die($mysqli_error($con));
+                        
+                          if (mysqli_num_rows($result) >= 1) {
+                            
+                            while ($row = mysqli_fetch_array($result)) {
+            
+                        ?>
+                        Category: <a href="#"><?php echo $row['name'];?></a>
+                        <?php
+                          }
+                        }
+                        ?>
                       </p>
                     </div>
                     <div class="aa-prod-view-bottom">
-                      <a class="aa-add-to-cart-btn" href="#">Add To Cart</a>
+                      <a class="aa-add-to-cart-btn" href="<?php echo 'product.php?id='.$data['product_id'].'&action=addproduct'?>">Add To Cart</a>
                       <a class="aa-add-to-cart-btn" href="#">Wishlist</a>
                       <a class="aa-add-to-cart-btn" href="#">Compare</a>
                     </div>
                   </div>
                 </div>
+                
               </div>
             </div>
             <div class="aa-product-details-bottom">
@@ -127,16 +142,16 @@
               <!-- Tab panes -->
               <div class="tab-content">
                 <div class="tab-pane fade in active" id="description">
-                  <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                  <ul>
+                  <p><?php echo $data['description'];?></p>
+                  <!-- <ul>
                     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quod, culpa!</li>
                     <li>Lorem ipsum dolor sit amet.</li>
                     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</li>
                     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolor qui eius esse!</li>
                     <li>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quibusdam, modi!</li>
-                  </ul>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, iusto earum voluptates autem esse molestiae ipsam, atque quam amet similique ducimus aliquid voluptate perferendis, distinctio!</p>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis ea, voluptas! Aliquam facere quas cumque rerum dolore impedit, dicta ducimus repellat dignissimos, fugiat, minima quaerat necessitatibus? Optio adipisci ab, obcaecati, porro unde accusantium facilis repudiandae.</p>
+                  </ul> -->
+                  <!-- <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Illum, iusto earum voluptates autem esse molestiae ipsam, atque quam amet similique ducimus aliquid voluptate perferendis, distinctio!</p>
+                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis ea, voluptas! Aliquam facere quas cumque rerum dolore impedit, dicta ducimus repellat dignissimos, fugiat, minima quaerat necessitatibus? Optio adipisci ab, obcaecati, porro unde accusantium facilis repudiandae.</p> -->
                 </div>
                 <div class="tab-pane fade " id="review">
                  <div class="aa-product-review-area">
@@ -213,6 +228,9 @@
                 </div>            
               </div>
             </div>
+              <?php
+                    }}
+                  ?>
             <!-- Related product -->
             <div class="aa-product-related-item">
               <h3>Related Products</h3>
